@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = 'your_super_secret_key_here'
 CORS(app, supports_credentials=True)
 
-DATABASE = 'mailsense.db'
+DATABASE = 'SmartInbox.db'
 
 def init_db():
     conn = sqlite3.connect(DATABASE)
@@ -41,7 +41,7 @@ def init_db():
         )
     ''')
 
-    admin_email = "admin@mailsense.com"
+    admin_email = "admin@SmartInbox.com"
     admin_pass = bcrypt.hashpw("Admin@123".encode(), bcrypt.gensalt()).decode()
     c.execute('''
         INSERT OR IGNORE INTO users (email, password_hash, is_admin)
