@@ -1,5 +1,5 @@
 
-# 📬 MailSense — Smart Email Platform with LLaMA-Powered Tone & Spam Detection
+# 📬 SmartInbox— Smart Email Platform with LLaMA-Powered Tone & Spam Detection
 
 MailSense is a modern, secure, and intelligent email web application that allows users to send, receive, and analyze emails. Built with **Flask**, **SQLite**, and integrated with **LLaMA 3.2 3B GGUF** models for local **tone classification** and **spam detection**, it provides real-time NLP capabilities directly in your inbox.
 
