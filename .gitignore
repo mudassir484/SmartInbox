@@ -1,0 +1,61 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.log
+
+# Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Flask/SQLite
+*.db
+instance/
+*.sqlite3
+
+# LLaMA models
+*.gguf
+models/
+
+# VS Code settings
+.vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Cache/Temp
+*.cache
+*.tmp
+*.swp
+*.bak
+
+# Jupyter
+.ipynb_checkpoints/
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Test/coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+.cache
+.pytest_cache/
+
+# Pydantic/mypy/ruff
+.mypy_cache/
+.dmypy.json
+.pyre/
+ruff_cache/
+
+# Others
+logs/
