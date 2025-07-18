@@ -21,8 +21,8 @@ MailSense is a modern, secure, and intelligent email web application that allows
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Rushilch/Email.git
-cd Email
+git clone https://github.com/mudassir484/SmartInbox
+
 ````
 
 ### 2. Set Up the Virtual Environment
