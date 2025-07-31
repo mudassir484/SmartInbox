@@ -45,13 +45,10 @@ Built with **Flask**, **SQLite**, and integrated with **LLaMA 3.2 (GGUF)** model
 ## 🚀 Getting Started
 
 ### 1️⃣ Clone the Repository
-```bash
+
 git clone https://github.com/mudassir484/SmartInbox
 cd SmartInbox
 2️⃣ Set Up the Virtual Environment
-bash
-Copy
-Edit
 python -m venv .venv
 .venv/Scripts/activate  # Windows
 # OR
@@ -61,14 +58,11 @@ pip install -r backend/requirements.txt
 3️⃣ Download & Place the LLaMA Model
 Recommended Model: Llama-3.2-3B-Instruct-GGUF
 
-Download:
 
-Copy
 Edit
 llama-3.2-3b-instruct-q4_k_m.gguf
 Place in:
 
-bash
 Copy
 Edit
 Email/models/llama-3.2-3b-instruct-q4_k_m.gguf
@@ -77,15 +71,12 @@ Email/models/llama-3.2-3b-instruct-q4_k_m.gguf
 4️⃣ Configure Environment Variables
 Create a .env file:
 
-ini
-Copy
 Edit
 SENDER_EMAIL=yourappemail@gmail.com
 EMAIL_PASS=your_gmail_app_password
 ⚠️ Use a Gmail App Password — not your personal password.
 
 5️⃣ Run the App
-bash
 Copy
 Edit
 python app.py
@@ -95,9 +86,7 @@ http://localhost:5000
 📡 How External Read Tracking Works
 SmartInbox embeds a tiny tracking pixel image in external Gmail emails:
 
-html
-Copy
-Edit
+
 <img src="https://your-domain.com/open_tracker/<email_id>.png" width="1" height="1" />
 When the recipient opens the email in Gmail:
 
