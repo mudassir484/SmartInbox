@@ -1,109 +1,156 @@
+# 📬 SmartInbox — AI‑Powered Smart Email Platform
 
-# 📬 SmartInbox— Smart Email Platform with LLaMA-Powered Tone & Spam Detection
+SmartInbox is a **modern, secure, and intelligent email web application** that allows you to send, receive, and analyze both **internal** and **external** emails.  
+It features **AI‑powered tone detection, spam detection, summarization, and read receipts** — all inside a clean, modern web interface.
 
-MailSense is a modern, secure, and intelligent email web application that allows users to send, receive, and analyze emails. Built with **Flask**, **SQLite**, and integrated with **LLaMA 3.2 3B GGUF** models for local **tone classification** and **spam detection**, it provides real-time NLP capabilities directly in your inbox.
+Built with **Flask**, **SQLite**, and integrated with **LLaMA 3.2 (GGUF)** models for **offline AI inference**, SmartInbox delivers real‑time NLP insights without relying on third‑party AI APIs.
 
-## ✨ Features
+---
 
-- 📨 Send and receive emails between users
-- 🧠 AI-powered tone classification (polite, formal, neutral, urgent)
-- 🚫 Spam detection using LLaMA local inference
-- 📊 Admin dashboard with analytics and email monitoring
-- 📬 Inbox & Sent views with read tracking
-- 🧾 Lightweight SQLite database
-- 🔐 Secure login/register flow with password hashing
-- 🎨 Responsive Bootstrap UI with aesthetic polish
+## ✨ Key Features
+
+### 📤 Email Sending & Receiving
+- **Internal email** between SmartInbox users.
+- **External email** sending via Gmail SMTP.
+- **Reply directly** from inbox with pre‑filled details.
+- **Tracking pixel** for external emails — detect when Gmail recipients open your message.
+
+### 🧠 AI‑Powered Intelligence
+- **Tone classification** — friendly, formal, urgent, angry, sarcastic, etc.
+- **Spam detection** — powered by local LLaMA inference.
+- **AI summarization** of long emails — quick previews without reading the whole message.
+
+### 📊 Tracking & Analytics
+- **Internal read receipts** — automatically marks email as read when opened in the app.
+- **External Gmail tracking pixel** — detects when recipient views your message.
+- **Sender dashboard** — view all internal & external sent emails in one place.
+- **Admin analytics dashboard**:
+  - Active users
+  - Total emails sent
+  - Spam count
+  - Read statistics
+
+### 🔐 Security & User Management
+- Secure **login/register** with password hashing (**bcrypt**).
+- Admin control panel — view all emails and users.
+- Spam flagging in UI for quick identification.
+
+### 🎨 Modern UI
+- Responsive **Bootstrap 5** design.
+- Inbox cards with **tone badges** & **spam labels**.
+- Sent dashboard and admin panel with charts and tables.
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Clone the Repository
-
+### 1️⃣ Clone the Repository
 ```bash
 git clone https://github.com/mudassir484/SmartInbox
-
-````
-
-### 2. Set Up the Virtual Environment
-
-```bash
+cd SmartInbox
+2️⃣ Set Up the Virtual Environment
+bash
+Copy
+Edit
 python -m venv .venv
-.venv/Scripts/activate  # On Windows
-# Or use: source .venv/bin/activate  # On Mac/Linux
+.venv/Scripts/activate  # Windows
+# OR
+source .venv/bin/activate  # Mac/Linux
+
 pip install -r backend/requirements.txt
-```
+3️⃣ Download & Place the LLaMA Model
+Recommended Model: Llama-3.2-3B-Instruct-GGUF
 
-### 3. Download the LLaMA Model (Offline Inference)
+Download:
 
-> ✅ Recommended Model: [Llama-3.2-3B-Instruct-GGUF](https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF)
+Copy
+Edit
+llama-3.2-3b-instruct-q4_k_m.gguf
+Place in:
 
-* Download the file:
-  **`llama-3.2-3b-instruct-q4_k_m.gguf`**
+bash
+Copy
+Edit
+Email/models/llama-3.2-3b-instruct-q4_k_m.gguf
+💡 Uses llama-cpp-python for offline AI inference.
 
-* Place it inside the project at:
-  `Email/models/llama-3.2-3b-instruct-q4_k_m.gguf`
+4️⃣ Configure Environment Variables
+Create a .env file:
 
-> 💡 The app uses [`llama-cpp-python`](https://github.com/abetlen/llama-cpp-python) to load and run the model **entirely offline**, no OpenAI API keys needed.
+ini
+Copy
+Edit
+SENDER_EMAIL=yourappemail@gmail.com
+EMAIL_PASS=your_gmail_app_password
+⚠️ Use a Gmail App Password — not your personal password.
 
----
-
-### 4. Run the Application
-
-```bash
+5️⃣ Run the App
+bash
+Copy
+Edit
 python app.py
-```
+Open in your browser:
+http://localhost:5000
 
-The app will start on [http://localhost:5000](http://localhost:5000) by default.
+📡 How External Read Tracking Works
+SmartInbox embeds a tiny tracking pixel image in external Gmail emails:
 
----
+html
+Copy
+Edit
+<img src="https://your-domain.com/open_tracker/<email_id>.png" width="1" height="1" />
+When the recipient opens the email in Gmail:
 
-## 🧪 Tech Stack
+Gmail loads the tracking image.
 
-| Layer         | Tech Used                         |
-| ------------- | --------------------------------- |
-| Backend       | Python, Flask, SQLite             |
-| AI/NLP        | LLaMA 3.2 3B (GGUF via llama-cpp) |
-| Frontend      | HTML, CSS, Bootstrap 5            |
-| Auth/Security | Flask Sessions, Bcrypt            |
-| Deployment    | Local (production-ready layout)   |
+SmartInbox records the open time in the database.
 
----
+You can view this in your Sent Dashboard and Admin Panel.
 
-## 🛠️ Folder Structure
+📌 Note: Gmail caches images — so first open is always tracked, but repeated opens may not trigger new logs.
 
-```
+🧪 Tech Stack
+Layer	Tech Used
+Backend	Python, Flask, SQLite
+AI/NLP	LLaMA 3.2 3B (GGUF via llama-cpp)
+Frontend	HTML, CSS, Bootstrap 5
+Auth/Security	Flask Sessions, bcrypt password hashing
+Email Sending	Gmail SMTP + Internal routing
+Tracking	DB read receipts + tracking pixel
+Deployment	Local / production‑ready Flask app
+
+📂 Folder Structure
+bash
+Copy
+Edit
 Email/
-├── app.py                  # Main Flask App
+├── app.py                  # Main Flask app
 ├── backend/
-│   ├── llama_utils.py      # Model integration utilities
-│   ├── requirements.txt    # All dependencies
-├── templates/              # HTML templates
+│   ├── llama_utils.py      # AI tone/spam/summarizer
+│   ├── requirements.txt    # Dependencies
+├── templates/              # HTML templates (Inbox, Admin, Login, etc.)
 ├── static/                 # CSS, JS, Icons
-├── models/                 # GGUF LLaMA model goes here
-└── mailsense.db            # SQLite DB (auto-created)
-```
+├── models/                 # LLaMA model (.gguf)
+├── Sbox.db                 # SQLite DB (auto-created)
+└── .env                    # Email credentials
+📸 UI Overview
+Login & Register
 
----
+Sender Dashboard — internal + external sent emails
 
-## 📸 Screenshots
+Inbox — read/unread states, tone & spam labels, quick view
 
->
-> * Login
-> * Register
-> * Sender dashboard
-> * Inbox with tone and spam tags
-> * Admin panel
+Email Modal — full message view, summarization, reply
 
----
+Admin Panel — charts, stats, user & email management
 
----
+🔮 Future Roadmap
+📅 Email scheduling & drafts
 
-## 🧠 Future Improvements
+📎 File attachments
 
-* ✉️ Email scheduling and drafts
-* 📎 File attachments support
-* 🌍 Dockerized deployment
-* 📈 Model upgrade to LLaMA 3.2 8B with quantization
+🗂 Folders & labels
 
----                   
+🐳 Dockerized deployment
+
+⚡ Upgrade to LLaMA 3.2‑8B with quantization
