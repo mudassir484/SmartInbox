@@ -1,7 +1,5 @@
 flask
 flask-cors
 bcrypt
-transformers 
-accelerate
-torch
-llama-cpp-python
+dotenv
+groq
