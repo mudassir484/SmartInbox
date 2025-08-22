@@ -1,145 +1,155 @@
-# 📬 SmartInbox — AI‑Powered Smart Email Platform
 
-SmartInbox is a **modern, secure, and intelligent email web application** that allows you to send, receive, and analyze both **internal** and **external** emails.  
-It features **AI‑powered tone detection, spam detection, summarization, and read receipts** — all inside a clean, modern web interface.
+# SmartInbox — Smart Email Platform with Groq & LLaMA
 
-Built with **Flask**, **SQLite**, and integrated with **LLaMA 3.2 (GGUF)** models for **offline AI inference**, SmartInbox delivers real‑time NLP insights without relying on third‑party AI APIs.
+**SmartInbox** is a secure, modern email web application built with **Flask** and **SQLite**.  
+It combines everyday email features with intelligent tools powered by the **Groq API** and **LLaMA 3.1** for better communication and productivity.
 
----
 
-## ✨ Key Features
+## Key Features
 
-### 📤 Email Sending & Receiving
-- **Internal email** between SmartInbox users.
-- **External email** sending via Gmail SMTP.
-- **Reply directly** from inbox with pre‑filled details.
-- **Tracking pixel** for external emails — detect when Gmail recipients open your message.
+###  Core Email Features
+- **Secure Login & Registration** — User accounts are protected with Bcrypt password hashing.
+- **Internal & External Messaging** — Send messages to other platform users or external addresses.
+- **Separate Inbox & Sent Views** — Quickly switch between received and sent emails.
+- **Read Receipts** — See when your internal messages are opened.
 
-### 🧠 AI‑Powered Intelligence
-- **Tone classification** — friendly, formal, urgent, angry, sarcastic, etc.
-- **Spam detection** — powered by local LLaMA inference.
-- **AI summarization** of long emails — quick previews without reading the whole message.
+###  Smart Tools (Powered by Groq API)
+- **Tone Classification** — Detects one of 14 tones (e.g., Friendly, Urgent, Formal, Apologetic).
+- **Spam Detection** — Automatically flags unwanted or suspicious messages.
+- **Email Summaries** — Generates a quick summary for received messages.
+- **Tone Rewriter** — Adjusts your email tone before sending (e.g., Polite, Sarcastic).
 
-### 📊 Tracking & Analytics
-- **Internal read receipts** — automatically marks email as read when opened in the app.
-- **External Gmail tracking pixel** — detects when recipient views your message.
-- **Sender dashboard** — view all internal & external sent emails in one place.
-- **Admin analytics dashboard**:
-  - Active users
-  - Total emails sent
-  - Spam count
-  - Read statistics
-
-### 🔐 Security & User Management
-- Secure **login/register** with password hashing (**bcrypt**).
-- Admin control panel — view all emails and users.
-- Spam flagging in UI for quick identification.
-
-### 🎨 Modern UI
-- Responsive **Bootstrap 5** design.
-- Inbox cards with **tone badges** & **spam labels**.
-- Sent dashboard and admin panel with charts and tables.
+###  Dashboards & Interface
+- **Admin Dashboard**
+  - Overview cards for Active Users, Total Emails, Spam Count, and Read Count.
+  - Charts for email trends, internal vs. external messages, and tone distribution.
+  - Tools to view and manage users and messages.
+- **Clean, Responsive UI** — Built with Bootstrap 5 for an intuitive user experience.
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
-### 1️⃣ Clone the Repository
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Rushilch/Email.git
+cd Email
+```
 
-git clone https://github.com/mudassir484/SmartInbox
-cd SmartInbox
-2️⃣ Set Up the Virtual Environment
+### 2. Create a Virtual Environment & Install Dependencies
+
+```bash
 python -m venv .venv
-.venv/Scripts/activate  # Windows
-# OR
-source .venv/bin/activate  # Mac/Linux
+# Activate it:
+# Windows:
+.venv\Scripts\activate
+# Mac/Linux:
+source .venv/bin/activate
 
 pip install -r backend/requirements.txt
-3️⃣ Download & Place the LLaMA Model
-Recommended Model: Llama-3.2-3B-Instruct-GGUF
+```
 
+### 3. Set Up Environment Variables
 
-Edit
-llama-3.2-3b-instruct-q4_k_m.gguf
-Place in:
+Create a file named `.env` in the project root (`Email/.env`):
 
-Copy
-Edit
-Email/models/llama-3.2-3b-instruct-q4_k_m.gguf
-💡 Uses llama-cpp-python for offline AI inference.
+```env
+GROQ_API="groq_api_key"
+SENDER_EMAIL="your-gmail@gmail.com"
+EMAIL_PASS="your-gmail-app-password-key"
+```
 
-4️⃣ Configure Environment Variables
-Create a .env file:
+> **Note:** Never commit `.env` to version control.
+> Get your Groq API key at: [https://groq.com/](https://groq.com/)
 
-Edit
-SENDER_EMAIL=yourappemail@gmail.com
-EMAIL_PASS=your_gmail_app_password
-⚠️ Use a Gmail App Password — not your personal password.
+### 4. Run the Application
 
-5️⃣ Run the App
-Copy
-Edit
+```bash
 python app.py
-Open in your browser:
-http://localhost:5000
+```
 
-📡 How External Read Tracking Works
-SmartInbox embeds a tiny tracking pixel image in external Gmail emails:
+The app will run at **[http://127.0.0.1:5000](http://127.0.0.1:5000)**.
 
+**Default Admin Login:**
+Email: `admin@sbox.com`
+Password: `admin@123`
 
-<img src="https://your-domain.com/open_tracker/<email_id>.png" width="1" height="1" />
-When the recipient opens the email in Gmail:
+---
 
-Gmail loads the tracking image.
+## 🧪 Tech Stack
 
-SmartInbox records the open time in the database.
+| Layer        | Technologies Used                |
+| ------------ | -------------------------------- |
+| **Backend**  | Python, Flask, SQLite            |
+| **AI/NLP**   | Groq API (LLaMA 3.1 8B)          |
+| **Frontend** | HTML, CSS, Bootstrap 5, Chart.js |
+| **Security** | Flask Sessions, Bcrypt           |
 
-You can view this in your Sent Dashboard and Admin Panel.
+---
 
-📌 Note: Gmail caches images — so first open is always tracked, but repeated opens may not trigger new logs.
+##  Project Structure
 
-🧪 Tech Stack
-Layer	Tech Used
-Backend	Python, Flask, SQLite
-AI/NLP	LLaMA 3.2 3B (GGUF via llama-cpp)
-Frontend	HTML, CSS, Bootstrap 5
-Auth/Security	Flask Sessions, bcrypt password hashing
-Email Sending	Gmail SMTP + Internal routing
-Tracking	DB read receipts + tracking pixel
-Deployment	Local / production‑ready Flask app
-
-📂 Folder Structure
-bash
-Copy
-Edit
+```
 Email/
-├── app.py                  # Main Flask app
+├── .venv                 # Virtual environment
+├── .env                   # API keys & config
+├── app.py                 # Main Flask app
 ├── backend/
-│   ├── llama_utils.py      # AI tone/spam/summarizer
-│   ├── requirements.txt    # Dependencies
-├── templates/              # HTML templates (Inbox, Admin, Login, etc.)
-├── static/                 # CSS, JS, Icons
-├── models/                 # LLaMA model (.gguf)
-├── Sbox.db                 # SQLite DB (auto-created)
-└── .env                    # Email credentials
-📸 UI Overview
-Login & Register
+│   ├── llama_utils.py     # Groq API integration
+│   └── requirements.txt   # Dependencies
+├── statics/
+|   └── email.png          # favicon
+├── templates/             # HTML templates
+│   ├── login.html
+│   ├── register.html
+│   ├── sender_dashboard.html
+│   ├── received_emails.html
+│   └── admin_dashboard.html
+└── Sbox.db                # SQLite database
+```
 
-Sender Dashboard — internal + external sent emails
+---
 
-Inbox — read/unread states, tone & spam labels, quick view
+##  Screenshots
 
-Email Modal — full message view, summarization, reply
+* **Login Page**
+  <img width="1919" height="912" alt="Login page" src="https://github.com/user-attachments/assets/f66989ea-1c87-4858-8a9a-9559f64b8558" />
 
-Admin Panel — charts, stats, user & email management
+* **Register Page**
+  <img width="1919" height="912" alt="Registration page" src="https://github.com/user-attachments/assets/61ad56da-e4b4-4261-91de-ee289b0fdbd8" />
 
-🔮 Future Roadmap
-📅 Email scheduling & drafts
+* **Sender Dashboard** 
+  <img width="1919" height="912" alt="Compose" src="https://github.com/user-attachments/assets/4626443f-b8af-4482-875b-438c4fcda244" />
 
-📎 File attachments
+  <img width="1919" height="912" alt="Ai analysis" src="https://github.com/user-attachments/assets/07488ec6-ae70-4796-becd-56f20f1ee5f3" />
 
-🗂 Folders & labels
+  <img width="1919" height="912" alt="Rewrite feature" src="https://github.com/user-attachments/assets/268f7211-9efd-4eb4-b77c-2b3e256dcda6" />
 
-🐳 Dockerized deployment
+* **Inbox** 
+  <img width="1919" height="912" alt="Inbox" src="https://github.com/user-attachments/assets/ce65fe15-cfc3-4841-b1ec-96eb7e40006a" />
 
-⚡ Upgrade to LLaMA 3.2‑8B with quantization
+  <img width="1919" height="912" alt="View mail" src="https://github.com/user-attachments/assets/21afbe3c-d1a9-4fc9-9a85-a14721ff3251" />
+
+  <img width="1919" height="912" alt="Reply" src="https://github.com/user-attachments/assets/74da3982-1165-453c-a7d9-901923752dfa" />
+
+* **Admin Dashboard**
+  <img width="1919" height="912" alt="User statistics and source breakdown" src="https://github.com/user-attachments/assets/56fda49d-81d9-4feb-93b6-1571e7738e47" />
+  
+  <img width="1919" height="912" alt="Tone analysis and user management" src="https://github.com/user-attachments/assets/7bdeedd2-4dcb-48e8-9e66-fd2c4ce1a2eb" />
+
+  <img width="1919" height="912" alt="Mail controls" src="https://github.com/user-attachments/assets/131818b2-9ccd-4010-8b1b-163d1d60b5df" />
+
+  <img width="1919" height="912" alt="View mail" src="https://github.com/user-attachments/assets/9e21a1b9-dfad-4fb2-9d8c-69108cee2109" />
+
+  <img width="1919" height="912" alt="Delete User" src="https://github.com/user-attachments/assets/d2cd6265-b703-4101-84ba-a452f6435040" />
+
+
+
+
+---
+
+##  Planned Enhancements
+
+*  File attachments
+*  Dockerized deployment
+*  Real‑time new message alerts
