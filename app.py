@@ -140,13 +140,48 @@ def send_external_email(to_email, subject, body, sbox_sender_name):
 # --- DASHBOARD ROUTES ---
 @app.route('/sender_dashboard')
 def sender_dashboard():
-    if 'user_id' not in session: return redirect(url_for('index'))
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+
     user_id = session.get('user_id')
     conn = get_db()
-    internal_sent = conn.execute("SELECT e.id, e.recipient_email, e.subject, e.body, strftime('%Y-%m-%d %H:%M', e.sent_at) AS sent_at, CASE WHEN e.opened_at IS NULL THEN NULL ELSE strftime('%Y-%m-%d %H:%M', e.opened_at) END AS opened_at, e.is_spam, e.tone, 'Internal' AS source FROM emails e WHERE e.sender_id = ? ORDER BY e.sent_at DESC", (user_id,)).fetchall()
-    external_sent = conn.execute("SELECT ee.id, ee.recipient_email, ee.subject, ee.body, strftime('%Y-%m-%d %H:%M', ee.sent_at) AS sent_at, NULL AS opened_at, ee.is_spam, ee.tone, 'External' AS source FROM external_emails ee WHERE ee.sender_id = ? ORDER BY ee.sent_at DESC", (user_id,)).fetchall()
+
+    internal_sent = conn.execute("""
+        SELECT e.id, e.recipient_email, e.subject, e.body,
+               strftime('%Y-%m-%d %H:%M', e.sent_at) AS sent_at,
+               CASE WHEN e.opened_at IS NULL THEN NULL
+                    ELSE strftime('%Y-%m-%d %H:%M', e.opened_at)
+               END AS opened_at,
+               e.is_spam, e.tone, 'Internal' AS source
+        FROM emails e
+        WHERE e.sender_id = ?
+        ORDER BY e.sent_at DESC
+    """, (user_id,)).fetchall()
+
+    external_sent = conn.execute("""
+        SELECT ee.id, ee.recipient_email, ee.subject, ee.body,
+               strftime('%Y-%m-%d %H:%M', ee.sent_at) AS sent_at,
+               NULL AS opened_at,
+               ee.is_spam, ee.tone, 'External' AS source
+        FROM external_emails ee
+        WHERE ee.sender_id = ?
+        ORDER BY ee.sent_at DESC
+    """, (user_id,)).fetchall()
+
     conn.close()
-    return render_template('sender_dashboard.html', current_user=session.get('email'), current_id=user_id, emails=internal_sent + external_sent)
+
+    # Merge and sort all emails (internal + external)
+    emails = [dict(row) for row in internal_sent] + [dict(row) for row in external_sent]
+    emails.sort(key=lambda e: e["sent_at"], reverse=True)  # newest first
+
+    return render_template(
+        "sender_dashboard.html",
+        current_user=session.get("email"),
+        current_id=user_id,
+        emails=emails
+    )
+
+
 
 @app.route('/admin_dashboard')
 def admin_dashboard():
@@ -340,4 +375,4 @@ def delete_user(user_id):
 
         
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True)S
