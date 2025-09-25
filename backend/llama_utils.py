@@ -6,12 +6,12 @@ from groq import Groq
 # Groq Model Setup
 # ------------------------- #
 
-# Make sure you set your Groq API key in the environment:
-# export GROQ_API_KEY="your_api_key_here"
-# or in Windows:
-# setx GROQ_API_KEY "your_api_key_here"
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API"))
+
+# Use a supported Groq model
+MODEL_NAME = "llama-3.1-8b-instant"  # alternatives: llama-3.1-70b-versatile
+
 
 # ------------------------- #
 # Groq Wrapper
@@ -20,7 +20,7 @@ client = Groq(api_key=os.getenv("GROQ_API"))
 def generate_llama_response(prompt: str, max_tokens=64):
     try:
         response = client.chat.completions.create(
-            model="llama3-8b-8192",  # You can change to llama3-70b if needed
+            model=MODEL_NAME,
             messages=[{"role": "user", "content": prompt}],
             temperature=0.1,
             max_tokens=max_tokens,
@@ -55,7 +55,6 @@ def classify_email_tone(email_text: str) -> str:
             "appreciative", "sarcastic", "confused", "demanding", "encouraging",
             "threatening", "dismissive"
         ]
-
         detected = [tone for tone in tones if tone in result]
         if detected:
             return ", ".join(detected)
@@ -81,7 +80,7 @@ def classify_email_tone(email_text: str) -> str:
         fallback_tones.append("threatening")
     if any(w in text for w in ["whatever", "don't care", "not my problem"]):
         fallback_tones.append("dismissive")
-    
+
     if fallback_tones:
         return ", ".join(set(fallback_tones))
 
@@ -112,7 +111,7 @@ Spam includes:
 Return your answer in EXACTLY one word: 'yes' or 'no'.
 
 Email:
-\"\"\"{email_text.strip()}\"\"\"
+\"\"\"{email_text.strip()}\"\"\" 
 Answer:
     """
 
@@ -131,7 +130,8 @@ Answer:
 
 def summarize_email(email_text: str) -> str:
     prompt = (
-        "You are an expert email summarizer. Summarize the following email using easy vocabulary under 30 and just state the summary nothing else:\n\n"
+        "You are an expert email summarizer. Summarize the following email using easy vocabulary under 30 words. "
+        "Respond ONLY with the summary text:\n\n"
         f"Email: {email_text.strip()}\n\n"
         "Summary:"
     )
@@ -141,17 +141,28 @@ def summarize_email(email_text: str) -> str:
         return result.strip()
     return "Summary unavailable."
 
+
+# ------------------------- #
+# Rewriter
+# ------------------------- #
+
 def rewrite_email_tone(text: str, tone: str) -> str:
     prompt = (
         f"You are an expert email editor. Rewrite the following email text to have a {tone} tone. "
-        "Keep the core message and meaning the same, but adjust the phrasing, vocabulary, and nuance. "
-        "Respond ONLY with the rewritten email body, and nothing else.\n\n"
+        "Keep the core message the same, but adjust phrasing, vocabulary, and nuance. "
+        "Respond ONLY with the rewritten email body (no extra text).\n\n"
         f"Original Text: \"{text.strip()}\"\n\n"
-        f"Rewritten Text with a {tone} tone also just give the rewritten text no need to say that you have rewritten it and make sure that it is the same word count"
+        f"Rewritten Text with a {tone} tone:"
     )
-    # Give the model more tokens for rewriting longer text
+
     result = generate_llama_response(prompt, max_tokens=512)
-    print(result)
-    if result[0] == '"' and result[-1]=='"':
-        return result[1:-1]
-    return result if result else "Could not rewrite the text."
+
+    if not result:
+        return "⚠️ Could not rewrite the text."
+
+    result = result.strip()
+    # Remove wrapping quotes if present
+    if result.startswith('"') and result.endswith('"'):
+        result = result[1:-1]
+
+    return result
